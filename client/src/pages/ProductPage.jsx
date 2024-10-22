@@ -13,7 +13,9 @@ const ProductPage = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${productId}`);
+      const { data } = await axios.get(`/api/products/${productId}`, {
+        withCredentials: true,
+      });
       setProduct(data);
     };
     fetchProduct();
