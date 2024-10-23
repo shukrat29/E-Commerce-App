@@ -5,6 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
+import Loader from "../components/Loader";
 
 const ProductPage = () => {
   const { id: productId } = useParams();
@@ -21,7 +22,7 @@ const ProductPage = () => {
       </Link>
 
       {isLoading ? (
-        <h2>Loading....</h2>
+        <Loader />
       ) : error ? (
         <div>error?.data?.message || error</div>
       ) : (
