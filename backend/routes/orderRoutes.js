@@ -16,7 +16,7 @@ router.post("/", userAuth, addOrderItems);
 router.get("/", userAuth, adminAuth, getOrders);
 
 router.get("/myorder", userAuth, getMyOrders);
-router.get("/:id", userAuth, adminAuth, getOrderById);
+router.get("/:id", userAuth, getOrderById);
 router.put("/:id/pay", userAuth, updateOrderToPaid);
 router.put("/:id/deliver", userAuth, adminAuth, updateOrderToDelivered);
 
