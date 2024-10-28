@@ -21,7 +21,7 @@ router.post("/login", loginUser);
 
 router.post("/logout", logoutUser);
 router.get("/profile", userAuth, getUserProfile);
-router.put("/profile/update", userAuth, updateUserProfile);
+router.put("/profile", userAuth, updateUserProfile);
 
 // Admin routes
 router.route("/").get(getUsers);
