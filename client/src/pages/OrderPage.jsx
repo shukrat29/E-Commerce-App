@@ -16,6 +16,7 @@ import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
+  useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -32,6 +33,9 @@ const OrderPage = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -98,6 +102,15 @@ const OrderPage = () => {
       });
   }
 
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order delivered");
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  };
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -182,33 +195,49 @@ const OrderPage = () => {
                 <Col>Subtotal:</Col>
                 <Col>${order.totalPrice}</Col>
               </Row>
-            </ListGroup>
-            {/* Pay order placeholder and mark as delivered placeholder */}
-            {!order.isPaid && (
-              <ListGroup.Item>
-                {loadingPay && <Loader />}
 
-                {isPending ? (
-                  <Loader />
-                ) : (
-                  <div>
-                    <Button
-                      onClick={onApproveTest}
-                      style={{ marginBottom: "10px" }}
-                    >
-                      Pay Now Testing
-                    </Button>
+              {/* Pay order placeholder and mark as delivered placeholder */}
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+
+                  {isPending ? (
+                    <Loader />
+                  ) : (
                     <div>
-                      <PayPalButtons
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                        onError={onError}
-                      ></PayPalButtons>
+                      <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: "10px" }}
+                      >
+                        Pay Now Testing
+                      </Button>
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverOrderHandler}
+                    >
+                      Mark as Delivered
+                    </Button>
+                  </ListGroup.Item>
                 )}
-              </ListGroup.Item>
-            )}
+            </ListGroup>
           </Card>
         </Col>
       </Row>
