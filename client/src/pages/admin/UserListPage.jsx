@@ -11,14 +11,19 @@ import {
 import { toast } from "react-toastify";
 
 const UserListPage = () => {
-  const { data: users, isLoading, error } = useGetUsersQuery();
+  const { data: users, refetch, isLoading, error } = useGetUsersQuery();
 
   const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
 
-  const deleteHandler = (id) => {
+  const deleteHandler = async (id) => {
     if (window.confirm("Are you sure?")) {
       try {
-      } catch (error) {}
+        await deleteUser(id);
+        toast.success("User deleted");
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
     }
   };
 

@@ -10,7 +10,8 @@ import { userAuth, adminAuth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(getProducts).post(userAuth, adminAuth, addProduct);
+router.route("/").get(getProducts);
+router.post("/", userAuth, adminAuth, addProduct);
 router.route("/:id").get(getProductById);
 
 router.put("/:id/edit", userAuth, adminAuth, updateProduct);

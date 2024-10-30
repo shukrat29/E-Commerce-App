@@ -6,16 +6,12 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import {
   useGetProductsQuery,
-  useAddProductMutation,
   useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import { toast } from "react-toastify";
 
 const ProductListPage = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
-
-  const [addProduct, { isLoading: addProductLoading }] =
-    useAddProductMutation();
 
   const [deleteProduct, { isLoading: loadingDelete }] =
     useDeleteProductMutation();
@@ -31,16 +27,6 @@ const ProductListPage = () => {
     }
   };
 
-  const addProductHandler = async () => {
-    if (window.confirm("Are you sure you want to add a new product"))
-      try {
-        await addProduct();
-        refetch();
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
-      }
-  };
-
   return (
     <>
       <Row className="align-items-center">
@@ -48,12 +34,15 @@ const ProductListPage = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3" onClick={addProductHandler}>
-            <FaEdit /> Add Product
-          </Button>
+          <LinkContainer to={`/admin/product/add`}>
+            <Button variant="primary" className="my-2">
+              <FaEdit />
+              Add Product
+            </Button>
+          </LinkContainer>
         </Col>
       </Row>
-      {addProductLoading && <Loader />}
+
       {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
