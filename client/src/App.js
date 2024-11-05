@@ -10,7 +10,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="py-3">
+      <main className="py-3 min-vh-100">
         <Container>
           <Outlet />
         </Container>
