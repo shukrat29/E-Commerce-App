@@ -53,6 +53,7 @@ const HomePage = () => {
             page={data.page}
             keyword={keyword ? keyword : ""}
           />
+          <Row>Test the Demo! Email: demo@example.com Password: Demo1234</Row>
         </>
       )}
     </>
